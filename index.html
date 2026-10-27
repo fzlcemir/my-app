@@ -168,7 +168,10 @@ fieldset{border:0;padding:0;margin:0;grid-column:1 / -1;display:grid;gap:10px}
 .form-foot small{color:var(--ink-soft);font-size:.8rem;max-width:26em}
 .sent{grid-column:1 / -1;border:1px solid var(--gold);background:var(--paper-2);padding:20px;display:grid;gap:10px}
 .sent pre{white-space:pre-wrap;font-family:var(--body);font-size:.85rem;margin:0;color:var(--ink-soft);max-height:220px;overflow:auto}
-.error{color:var(--bordeaux);font-size:.85rem}
+.error{color:var(--bordeaux);font-size:.85rem;grid-column:1 / -1}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+form.quote-form{position:relative}
+.btn:disabled{opacity:.6;cursor:wait}
 @media (max-width:860px){.contact{grid-template-columns:1fr}}
 @media (max-width:560px){form.quote-form{grid-template-columns:1fr}.checks{grid-template-columns:1fr}}
 
@@ -372,10 +375,15 @@ footer.site .wrap{display:grid;gap:36px}
           <small>Uw gegevens gebruiken wij alleen om op uw aanvraag te reageren.</small>
           <button class="btn" type="submit">Offerte aanvragen</button>
         </div>
-        <p class="error" id="form-error" hidden></p>
-        <div class="sent" id="form-sent" hidden>
-          <strong style="color:var(--bordeaux)">Uw aanvraag staat klaar</strong>
-          <p style="font-size:.9rem">Uw e-mailprogramma opent met het bericht aan info@frontboekhouders.com. Opent er niets? Kopieer dan de tekst hieronder en mail deze naar ons.</p>
+        <div class="hp" aria-hidden="true"><label for="f-hp">Laat dit veld leeg</label><input id="f-hp" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <p class="error" id="form-error" role="alert" hidden></p>
+        <div class="sent" id="form-sent" role="status" hidden>
+          <strong style="color:var(--bordeaux)">Bedankt, uw aanvraag is verstuurd</strong>
+          <p style="font-size:.9rem">Wij hebben uw aanvraag ontvangen en reageren binnen twee werkdagen met een voorstel op maat.</p>
+        </div>
+        <div class="sent" id="form-failed" role="alert" hidden>
+          <strong style="color:var(--bordeaux)">Versturen is niet gelukt</strong>
+          <p style="font-size:.9rem">Controleer uw internetverbinding en probeer het opnieuw. Lukt het nog steeds niet? Kopieer dan de tekst hieronder en mail deze naar info@frontboekhouders.com.</p>
           <pre id="sent-text"></pre>
           <button class="copy" type="button" id="copy-msg">Tekst kopi&euml;ren</button>
         </div>
@@ -505,36 +513,55 @@ function selectFallback(text, btn){
 }
 document.getElementById("copy-email").addEventListener("click", e => copyText("info@frontboekhouders.com", e.currentTarget, "Adres kopiëren"));
 
-/* Offerteformulier */
-const form = document.getElementById("offerte"), err = document.getElementById("form-error"), sent = document.getElementById("form-sent");
-form.addEventListener("submit", e => {
+/* Offerteformulier: verstuurt de aanvraag via FormSubmit rechtstreeks naar info@frontboekhouders.com */
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/info@frontboekhouders.com";
+const form = document.getElementById("offerte"), err = document.getElementById("form-error"),
+      sent = document.getElementById("form-sent"), failed = document.getElementById("form-failed"),
+      submitBtn = form.querySelector('button[type="submit"]');
+form.addEventListener("submit", async e => {
   e.preventDefault();
   const d = new FormData(form);
+  if ((d.get("_honey") || "").trim()) return;
   const naam = (d.get("naam")||"").trim(), email = (d.get("email")||"").trim();
+  sent.hidden = true; failed.hidden = true;
   if(!naam || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     err.textContent = !naam ? "Vul uw naam in, zodat wij weten wie de aanvraag doet." : "Vul een geldig e-mailadres in, zodat wij u kunnen antwoorden.";
-    err.hidden = false; sent.hidden = true; return;
+    err.hidden = false; return;
   }
   err.hidden = true;
   const diensten = d.getAll("dienst");
-  const text =
-`Offerteaanvraag via de website
-
-Naam: ${naam}
-Bedrijf: ${d.get("bedrijf")||"-"}
-E-mail: ${email}
-Telefoon: ${d.get("telefoon")||"-"}
-Rechtsvorm: ${d.get("rechtsvorm")}
-Facturen per maand: ${d.get("omvang")}
-Diensten: ${diensten.length ? diensten.join(", ") : "-"}
-
-Toelichting:
-${d.get("bericht")||"-"}`;
-  document.getElementById("sent-text").textContent = text;
-  sent.hidden = false;
-  const link = document.createElement("a");
-  link.href = "mailto:info@frontboekhouders.com?subject=" + encodeURIComponent("Offerteaanvraag " + (d.get("bedrijf")||naam)) + "&body=" + encodeURIComponent(text);
-  link.click();
+  const data = {
+    "Naam": naam,
+    "Bedrijf": d.get("bedrijf") || "-",
+    "E-mail": email,
+    "Telefoon": d.get("telefoon") || "-",
+    "Rechtsvorm": d.get("rechtsvorm"),
+    "Facturen per maand": d.get("omvang"),
+    "Diensten": diensten.length ? diensten.join(", ") : "-",
+    "Toelichting": d.get("bericht") || "-",
+    _subject: "Offerteaanvraag " + (d.get("bedrijf") || naam),
+    _replyto: email,
+    _template: "table",
+    _captcha: "false"
+  };
+  submitBtn.disabled = true; submitBtn.textContent = "Bezig met versturen…";
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok || String(out.success) === "false") throw new Error(out.message || res.status);
+    form.reset();
+    sent.hidden = false;
+  } catch (ex) {
+    document.getElementById("sent-text").textContent = Object.entries(data)
+      .filter(([k]) => !k.startsWith("_")).map(([k, v]) => k + ": " + v).join("\n");
+    failed.hidden = false;
+  } finally {
+    submitBtn.disabled = false; submitBtn.textContent = "Offerte aanvragen";
+  }
 });
 document.getElementById("copy-msg").addEventListener("click", e => copyText(document.getElementById("sent-text").textContent, e.currentTarget, "Tekst kopiëren"));
 document.getElementById("year").textContent = new Date().getFullYear();
