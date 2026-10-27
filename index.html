@@ -125,13 +125,12 @@ section.block{padding-block:clamp(64px,9vw,110px)}
 
 /* Reviews */
 .reviews{background:var(--paper-2);border-block:1px solid var(--line)}
-.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px}
 .quote{background:var(--paper);border:1px solid var(--line);padding:30px 28px;display:flex;flex-direction:column;gap:18px;min-width:0}
 .quote .mark{font-family:var(--display);font-size:3.4rem;line-height:.6;color:var(--gold);height:22px}
 .quote blockquote{margin:0;font-style:italic;color:var(--ink)}
 .quote footer{margin-top:auto;font-family:var(--label);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
 .example-tag{align-self:flex-start;font-family:var(--label);font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bordeaux);border:1px dashed var(--gold);padding:4px 8px}
-@media (max-width:900px){.quotes{grid-template-columns:1fr}}
 
 /* Kennisbank */
 .posts{display:grid;gap:0;border-top:3px double var(--gold)}
@@ -197,7 +196,7 @@ footer.site .wrap{display:grid;gap:36px}
     <nav class="main" id="nav">
       <a href="#diensten">Diensten</a>
       <a href="#over-ons">Over ons</a>
-      <a href="#reviews">Reviews</a>
+      <a href="#reviews" class="reviews-link" hidden>Reviews</a>
       <a href="#kennisbank">Kennisbank</a>
       <a href="#contact">Contact</a>
       <a class="btn" href="#offerte">Offerte aanvragen</a>
@@ -305,32 +304,13 @@ footer.site .wrap{display:grid;gap:36px}
     </div>
   </section>
 
-  <section class="block reviews" id="reviews">
+  <section class="block reviews" id="reviews" hidden>
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Reviews</span>
         <h2>Wat klanten over ons zeggen</h2>
       </div>
-      <div class="quotes">
-        <figure class="quote">
-          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
-          <span class="mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>Hier komt de eerste klantreview. Bijvoorbeeld hoe de overstap verliep en wat de klant het meest waardeert aan de samenwerking.</blockquote>
-          <footer>Naam klant &middot; Bedrijf of branche</footer>
-        </figure>
-        <figure class="quote">
-          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
-          <span class="mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>Hier komt de tweede klantreview. Een korte, concrete ervaring werkt het best, bijvoorbeeld over een aangifte of een advies.</blockquote>
-          <footer>Naam klant &middot; Bedrijf of branche</footer>
-        </figure>
-        <figure class="quote">
-          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
-          <span class="mark" aria-hidden="true">&ldquo;</span>
-          <blockquote>Hier komt de derde klantreview. Vraag tevreden klanten om toestemming om hun naam en bedrijf te vermelden.</blockquote>
-          <footer>Naam klant &middot; Bedrijf of branche</footer>
-        </figure>
-      </div>
+      <div class="quotes" id="quotes"></div>
     </div>
   </section>
 
@@ -412,7 +392,7 @@ footer.site .wrap{display:grid;gap:36px}
         <div><b>FRONT</b><small>Boekhouders &amp; Adviseurs</small></div>
       </div>
       <nav class="foot-links" aria-label="Footer">
-        <a href="#diensten">Diensten</a><a href="#over-ons">Over ons</a><a href="#reviews">Reviews</a><a href="#kennisbank">Kennisbank</a><a href="#offerte">Offerte</a>
+        <a href="#diensten">Diensten</a><a href="#over-ons">Over ons</a><a href="#reviews" class="reviews-link" hidden>Reviews</a><a href="#kennisbank">Kennisbank</a><a href="#offerte">Offerte</a>
       </nav>
     </div>
     <div class="foot-bottom">
@@ -423,6 +403,25 @@ footer.site .wrap{display:grid;gap:36px}
 </footer>
 
 <script>
+/* Klantreviews. Zolang deze lijst leeg is, zijn het onderdeel Reviews en de menulinks verborgen.
+   Review toevoegen (alleen met toestemming van de klant), bijvoorbeeld:
+   { tekst: "Wat de klant schreef.", naam: "Jan Jansen", bedrijf: "Jansen Installatietechniek" },
+*/
+const REVIEWS = [
+];
+
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+if (REVIEWS.length) {
+  document.getElementById("quotes").innerHTML = REVIEWS.map(r => `
+    <figure class="quote">
+      <span class="mark" aria-hidden="true">&ldquo;</span>
+      <blockquote>${esc(r.tekst)}</blockquote>
+      <footer>${esc(r.naam)}${r.bedrijf ? " &middot; " + esc(r.bedrijf) : ""}</footer>
+    </figure>`).join("");
+  document.getElementById("reviews").hidden = false;
+  document.querySelectorAll(".reviews-link").forEach(a => a.hidden = false);
+}
+
 /* Kennisbank-artikelen. Nieuw artikel toevoegen: kopieer een blok en pas de tekst aan. */
 const POSTS = [
   {
