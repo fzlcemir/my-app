@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="monogram.png">
+<link rel="apple-touch-icon" href="monogram.png">
+<meta property="og:title" content="FRONT Boekhouders &amp; Adviseurs">
+<meta property="og:description" content="Boekhouding, belastingaangiftes, salarisadministratie en fiscaal advies voor ondernemers.">
+<meta property="og:image" content="logo.png">
+<title>FRONT Boekhouders &amp; Adviseurs</title>
+<meta name="description" content="FRONT Boekhouders & Adviseurs: boekhouding, belastingaangiftes, salarisadministratie en fiscaal advies voor ondernemers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500;600&display=swap">
+<style>
+/* Layout: klassiek kantoorbriefpapier. Smalle kolom, dubbele lijnen, bordeaux vlakken als "lakzegel" voor de belangrijkste momenten. Bewust één lichte uitstraling. */
+:root{
+  --paper:#FBF9F6;
+  --paper-2:#F3EEE8;
+  --ink:#2A1A1C;
+  --ink-soft:#5E4D4F;
+  --bordeaux:#4F161E;
+  --bordeaux-deep:#3A0F15;
+  --gold:#AE8F70;
+  --gold-soft:#D9C8B6;
+  --line:#E2D8CD;
+  --on-dark:#F6F0E8;
+  --display:"Playfair Display", "Didot", "Bodoni 72", Georgia, serif;
+  --body:"Libre Baskerville", Baskerville, Georgia, "Times New Roman", serif;
+  --label:"Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --wrap:1120px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;margin:0}
+a{color:var(--bordeaux)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+h1,h2,h3{font-family:var(--display);font-weight:500;color:var(--bordeaux);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:clamp(2rem,4vw,2.75rem)}
+h3{font-size:1.4rem}
+p{margin:0}
+.eyebrow{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.rule{display:flex;align-items:center;gap:14px;color:var(--gold)}
+.rule::before,.rule::after{content:"";flex:1;border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft);height:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--label);font-weight:600;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:15px 26px;border:1px solid var(--bordeaux);background:var(--bordeaux);color:var(--on-dark);cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:var(--bordeaux-deep)}
+.btn.ghost{background:transparent;color:var(--bordeaux)}
+.btn.ghost:hover{background:var(--bordeaux);color:var(--on-dark)}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(251,249,246,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--bordeaux)}
+.brand img{width:40px;height:auto}
+.brand-name{display:flex;flex-direction:column;line-height:1.1}
+.brand-name b{font-family:var(--display);font-weight:500;font-size:1.35rem;letter-spacing:.32em}
+.brand-name small{font-family:var(--label);font-size:.55rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-top:3px}
+nav.main{display:flex;align-items:center;gap:26px}
+nav.main a{font-family:var(--label);font-size:.74rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+nav.main a:hover{color:var(--bordeaux)}
+nav.main .btn{padding:11px 18px;color:var(--on-dark)}
+.menu-toggle{display:none;background:none;border:1px solid var(--line);padding:9px 12px;font-family:var(--label);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bordeaux);cursor:pointer}
+@media (max-width:900px){
+  .menu-toggle{display:block}
+  nav.main{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:8px clamp(16px,4vw,40px) 18px}
+  nav.main.open{display:flex}
+  nav.main a{padding:12px 0;border-bottom:1px solid var(--line)}
+  nav.main .btn{margin-top:14px;border-bottom:1px solid var(--bordeaux)}
+}
+
+/* Hero */
+.hero{padding-block:clamp(56px,9vw,110px) clamp(48px,7vw,90px);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(32px,6vw,80px);align-items:center}
+.hero h1{font-size:clamp(2.5rem,6vw,4.4rem);margin-top:18px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero .lead{font-size:1.1rem;color:var(--ink-soft);max-width:34em;margin-top:24px}
+.hero .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.seal img{display:block;width:100%;max-width:340px;margin-inline:auto}
+@media (max-width:820px){.hero .wrap{grid-template-columns:1fr}.seal{max-width:360px}}
+
+/* Sections */
+section.block{padding-block:clamp(64px,9vw,110px)}
+.section-head{display:grid;gap:16px;max-width:40em;margin-bottom:clamp(36px,5vw,56px)}
+.section-head p{color:var(--ink-soft)}
+
+/* Diensten: grootboek-stijl lijst */
+.ledger{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:3px double var(--gold)}
+.ledger article{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;padding:30px 28px 30px 0;border-bottom:1px solid var(--line);min-width:0}
+.ledger article:nth-child(odd){border-right:1px solid var(--line)}
+.ledger article:nth-child(even){padding-left:28px;padding-right:0}
+.ledger .code{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--gold);padding-top:6px;grid-row:span 3;font-variant-numeric:tabular-nums}
+.ledger h3{margin-bottom:4px}
+.ledger p{color:var(--ink-soft);font-size:.95rem}
+.ledger ul{margin:10px 0 0;padding-left:18px;color:var(--ink-soft);font-size:.9rem}
+.ledger li{margin-block:2px}
+@media (max-width:760px){.ledger{grid-template-columns:1fr}.ledger article,.ledger article:nth-child(even){padding:26px 0;border-right:0}}
+
+/* Werkwijze */
+.dark{background:var(--bordeaux);color:var(--on-dark)}
+.dark h2,.dark h3{color:var(--on-dark)}
+.dark .section-head p{color:var(--gold-soft)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid rgba(217,200,182,.35)}
+.steps li{list-style:none;padding:28px 24px 8px 0;min-width:0}
+.steps li+li{padding-left:24px;border-left:1px solid rgba(217,200,182,.35)}
+.steps .n{font-family:var(--display);font-style:italic;font-size:2.4rem;color:var(--gold);line-height:1}
+.steps h3{font-size:1.2rem;margin:14px 0 8px}
+.steps p{color:var(--gold-soft);font-size:.92rem}
+.steps ol{margin:0;padding:0}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}.steps li:nth-child(3){padding-left:0;border-left:0}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}.steps li,.steps li+li{padding:24px 0 8px;border-left:0;border-top:1px solid rgba(217,200,182,.35)}.steps li:first-child{border-top:0}}
+
+/* Over ons */
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,80px);align-items:start}
+.about .text{display:grid;gap:18px;color:var(--ink-soft);min-width:0}
+.about .text p:first-child{font-size:1.15rem;color:var(--ink);font-style:italic}
+.principles{display:grid;gap:0;border-top:3px double var(--gold);margin-top:10px}
+.principles div{display:grid;grid-template-columns:9rem 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.principles dt{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--bordeaux);padding-top:4px}
+.principles dd{margin:0;font-size:.95rem}
+@media (max-width:820px){.about{grid-template-columns:1fr}.principles div{grid-template-columns:1fr;gap:4px}}
+
+/* Reviews */
+.reviews{background:var(--paper-2);border-block:1px solid var(--line)}
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.quote{background:var(--paper);border:1px solid var(--line);padding:30px 28px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.quote .mark{font-family:var(--display);font-size:3.4rem;line-height:.6;color:var(--gold);height:22px}
+.quote blockquote{margin:0;font-style:italic;color:var(--ink)}
+.quote footer{margin-top:auto;font-family:var(--label);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.example-tag{align-self:flex-start;font-family:var(--label);font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bordeaux);border:1px dashed var(--gold);padding:4px 8px}
+@media (max-width:900px){.quotes{grid-template-columns:1fr}}
+
+/* Kennisbank */
+.posts{display:grid;gap:0;border-top:3px double var(--gold)}
+.post{display:grid;grid-template-columns:10rem minmax(0,1fr) auto;gap:10px 32px;align-items:baseline;padding:28px 0;border-bottom:1px solid var(--line)}
+.post .meta{font-family:var(--label);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:grid;gap:4px}
+.post .meta span:last-child{color:var(--ink-soft)}
+.post h3{font-size:1.45rem}
+.post p{color:var(--ink-soft);margin-top:8px;max-width:40em}
+.post button{background:none;border:0;border-bottom:1px solid var(--bordeaux);color:var(--bordeaux);font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:4px 0;cursor:pointer;white-space:nowrap}
+.post .full{grid-column:2 / 3;display:grid;gap:14px;margin-top:10px;color:var(--ink)}
+.post .full h4{font-family:var(--label);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--bordeaux);margin:10px 0 0}
+.post .full ul{margin:0;padding-left:20px}
+.disclaimer{font-size:.82rem;color:var(--ink-soft);font-style:italic;border-left:2px solid var(--gold);padding-left:14px}
+@media (max-width:760px){.post{grid-template-columns:1fr}.post .full{grid-column:1}.post button{justify-self:start}}
+
+/* Offerte & contact */
+.contact{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px);align-items:start}
+.contact-info{display:grid;gap:22px;min-width:0}
+.contact-card{border:1px solid var(--line);background:#fff;padding:24px;display:grid;gap:8px}
+.contact-card .addr{font-family:var(--display);font-size:1.3rem;color:var(--bordeaux);word-break:break-word;user-select:all}
+.copy{justify-self:start;background:none;border:1px solid var(--line);font-family:var(--label);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding:7px 11px;cursor:pointer}
+.copy:hover{border-color:var(--gold);color:var(--bordeaux)}
+form.quote-form{background:#fff;border:1px solid var(--gold-soft);padding:clamp(22px,4vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;min-width:0}
+.field{display:grid;gap:6px;min-width:0}
+.field.wide{grid-column:1 / -1}
+label,.legend{font-family:var(--label);font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:0;padding:12px 14px;width:100%}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+fieldset{border:0;padding:0;margin:0;grid-column:1 / -1;display:grid;gap:10px}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px}
+.checks label{display:flex;gap:10px;align-items:center;text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400;font-size:.92rem;color:var(--ink)}
+.checks input{width:16px;height:16px;accent-color:var(--bordeaux)}
+.form-foot{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.form-foot small{color:var(--ink-soft);font-size:.8rem;max-width:26em}
+.sent{grid-column:1 / -1;border:1px solid var(--gold);background:var(--paper-2);padding:20px;display:grid;gap:10px}
+.sent pre{white-space:pre-wrap;font-family:var(--body);font-size:.85rem;margin:0;color:var(--ink-soft);max-height:220px;overflow:auto}
+.error{color:var(--bordeaux);font-size:.85rem}
+@media (max-width:860px){.contact{grid-template-columns:1fr}}
+@media (max-width:560px){form.quote-form{grid-template-columns:1fr}.checks{grid-template-columns:1fr}}
+
+/* Footer */
+footer.site{background:var(--bordeaux-deep);color:var(--gold-soft);padding-block:56px 36px;font-size:.88rem}
+footer.site .wrap{display:grid;gap:36px}
+.foot-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px;align-items:flex-start}
+.foot-brand{display:flex;gap:16px;align-items:center}
+.foot-brand img{width:56px}
+.foot-brand b{display:block;font-family:var(--display);font-weight:500;font-size:1.6rem;letter-spacing:.32em;color:var(--on-dark)}
+.foot-brand small{font-family:var(--label);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.foot-links{display:flex;flex-wrap:wrap;gap:12px 28px}
+.foot-links a{color:var(--on-dark);text-decoration:none;font-family:var(--label);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+.foot-bottom{border-top:1px solid rgba(217,200,182,.25);padding-top:22px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-family:var(--label);font-size:.68rem;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="FRONT Boekhouders &amp; Adviseurs, naar boven">
+      <img src="monogram.png" alt="">
+      <span class="brand-name"><b>FRONT</b><small>Boekhouders &amp; Adviseurs</small></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="main" id="nav">
+      <a href="#diensten">Diensten</a>
+      <a href="#over-ons">Over ons</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#kennisbank">Kennisbank</a>
+      <a href="#contact">Contact</a>
+      <a class="btn" href="#offerte">Offerte aanvragen</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Boekhouding &middot; Belastingen &middot; Advies</span>
+        <h1>Uw cijfers op orde, <em>uw zaken</em> vooraan.</h1>
+        <p class="lead">FRONT verzorgt de administratie, aangiftes en het fiscale advies voor ondernemers die hun tijd liever aan hun bedrijf besteden. Degelijk, persoonlijk en met vaste afspraken over wat het kost.</p>
+        <div class="actions">
+          <a class="btn" href="#offerte">Vraag een offerte aan</a>
+          <a class="btn ghost" href="#diensten">Bekijk onze diensten</a>
+        </div>
+      </div>
+      <div class="seal">
+        <img src="logo.png" alt="Logo FRONT Boekhouders &amp; Adviseurs">
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="diensten">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Diensten</span>
+        <h2>Wat wij voor u verzorgen</h2>
+        <p>Van de dagelijkse boekingen tot de jaarafsluiting. U kiest de onderdelen die u uit handen wilt geven; wij stemmen de offerte daarop af.</p>
+      </div>
+      <div class="ledger">
+        <article>
+          <span class="code">01</span>
+          <h3>Boekhouding &amp; administratie</h3>
+          <p>Wij verwerken uw inkoop- en verkoopfacturen, bankmutaties en kasboek, zodat u op elk moment weet waar u staat.</p>
+        </article>
+        <article>
+          <span class="code">02</span>
+          <h3>Btw-aangifte</h3>
+          <p>Tijdige aangifte per maand of kwartaal, inclusief verleggingsregelingen, de ICP-opgaaf en de btw-fix voor webshops en dropshipping.</p>
+        </article>
+        <article>
+          <span class="code">03</span>
+          <h3>Jaarrekening</h3>
+          <p>Een heldere jaarrekening voor de Belastingdienst, uw bank of de KvK, met een toelichting die u ook zelf begrijpt.</p>
+        </article>
+        <article>
+          <span class="code">04</span>
+          <h3>Inkomsten- en vennootschapsbelasting</h3>
+          <p>Wij dienen uw aangiftes IB en Vpb altijd tijdig in en houden uw voorlopige aanslagen actueel. Zo helpen wij u te voorkomen dat u onnodig extra betaalt aan de Belastingdienst.</p>
+        </article>
+        <article>
+          <span class="code">05</span>
+          <h3>Salarisadministratie</h3>
+          <p>Loonstroken, loonaangiftes en jaaropgaven voor uw personeel, inclusief de werkkostenregeling en het DGA-salaris.</p>
+        </article>
+        <article>
+          <span class="code">06</span>
+          <h3>Fiscaal &amp; bedrijfsadvies</h3>
+          <p>Advies op de momenten die ertoe doen:</p>
+          <ul>
+            <li>Herstructureringen: omzetting naar bv, holdingstructuren, fusies en splitsingen</li>
+            <li>Estate planning: vermogensoverdracht, schenken, erven en bedrijfsopvolging</li>
+            <li>Investeringen en financiering</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block dark" id="werkwijze">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Werkwijze</span>
+        <h2>Zo gaan we samen van start</h2>
+        <p>Heldere stappen en vooraf duidelijkheid over de kosten. U weet wat u krijgt voordat wij beginnen.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="n">i.</span><h3>Kennismaking</h3><p>Een vrijblijvend gesprek over uw onderneming, uw administratie en uw wensen.</p></li>
+        <li><span class="n">ii.</span><h3>Offerte op maat</h3><p>U ontvangt een offerte met een vaste prijs per maand of per opdracht. Geen verrassingen achteraf.</p></li>
+        <li><span class="n">iii.</span><h3>Overdracht</h3><p>Wij zetten uw administratie over, regelen de machtigingen en koppelen uw bank.</p></li>
+        <li><span class="n">iv.</span><h3>Vast aanspreekpunt</h3><p>Eén adviseur die uw zaken kent, bewaakt de deadlines en denkt vooruit.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="over-ons">
+    <div class="wrap about">
+      <div class="section-head" style="margin-bottom:0">
+        <span class="eyebrow">Over ons</span>
+        <h2>Vakmanschap zoals het hoort</h2>
+      </div>
+      <div class="text">
+        <p>Bij FRONT geloven wij dat een goede boekhouder meer is dan iemand die de cijfers invoert.</p>
+        <p>Wij zijn een kantoor van boekhouders en fiscalisten dat ondernemers met raad en daad bijstaat. Wij werken nauwkeurig, houden ons aan de afspraken en nemen de tijd om uw situatie te begrijpen. Zo weet u niet alleen wat uw cijfers zijn, maar ook wat ze betekenen voor uw volgende stap.</p>
+        <dl class="principles">
+          <div><dt>Persoonlijk</dt><dd>Eén vast aanspreekpunt dat uw onderneming en uw geschiedenis kent.</dd></div>
+          <div><dt>Degelijk</dt><dd>Zorgvuldig werk, gecontroleerd volgens het vier-ogenprincipe.</dd></div>
+          <div><dt>Transparant</dt><dd>Vooraf afgesproken tarieven, zonder verborgen kosten.</dd></div>
+          <div><dt>Vooruitziend</dt><dd>Wij signaleren fiscale kansen en risico's voordat ze u verrassen.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reviews" id="reviews">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Reviews</span>
+        <h2>Wat klanten over ons zeggen</h2>
+      </div>
+      <div class="quotes">
+        <figure class="quote">
+          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Hier komt de eerste klantreview. Bijvoorbeeld hoe de overstap verliep en wat de klant het meest waardeert aan de samenwerking.</blockquote>
+          <footer>Naam klant &middot; Bedrijf of branche</footer>
+        </figure>
+        <figure class="quote">
+          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Hier komt de tweede klantreview. Een korte, concrete ervaring werkt het best, bijvoorbeeld over een aangifte of een advies.</blockquote>
+          <footer>Naam klant &middot; Bedrijf of branche</footer>
+        </figure>
+        <figure class="quote">
+          <span class="example-tag">Voorbeeldtekst &middot; vervangen door echte review</span>
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Hier komt de derde klantreview. Vraag tevreden klanten om toestemming om hun naam en bedrijf te vermelden.</blockquote>
+          <footer>Naam klant &middot; Bedrijf of branche</footer>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="kennisbank">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kennisbank</span>
+        <h2>Actueel uit de fiscaliteit</h2>
+        <p>Wij houden de wijzigingen in wet- en regelgeving voor u bij en leggen in gewone taal uit wat ze voor uw onderneming betekenen.</p>
+      </div>
+      <div class="posts" id="posts"></div>
+    </div>
+  </section>
+
+  <section class="block" id="contact" style="border-top:1px solid var(--line)">
+    <div class="wrap contact">
+      <div class="contact-info">
+        <div class="section-head" style="margin-bottom:0">
+          <span class="eyebrow">Offerte &amp; contact</span>
+          <h2>Vraag vrijblijvend een offerte aan</h2>
+          <p>Vertel ons kort wat u zoekt. U ontvangt binnen twee werkdagen een reactie met een voorstel op maat.</p>
+        </div>
+        <div class="contact-card">
+          <span class="eyebrow">E-mail</span>
+          <span class="addr" id="email-addr">info@frontboekhouders.com</span>
+          <button class="copy" type="button" id="copy-email">Adres kopi&euml;ren</button>
+        </div>
+      </div>
+
+      <form class="quote-form" id="offerte" novalidate>
+        <div class="field"><label for="f-naam">Naam</label><input id="f-naam" name="naam" autocomplete="name" required></div>
+        <div class="field"><label for="f-bedrijf">Bedrijfsnaam</label><input id="f-bedrijf" name="bedrijf" autocomplete="organization"></div>
+        <div class="field"><label for="f-email">E-mailadres</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="f-tel">Telefoon</label><input id="f-tel" name="telefoon" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="f-vorm">Rechtsvorm</label>
+          <select id="f-vorm" name="rechtsvorm">
+            <option>Eenmanszaak / zzp</option><option>Vof / maatschap</option><option>Bv</option><option>Stichting / vereniging</option><option>Nog te starten</option><option>Particulier</option>
+          </select></div>
+        <div class="field"><label for="f-omvang">Aantal facturen per maand</label>
+          <select id="f-omvang" name="omvang">
+            <option>Minder dan 25</option><option>25 tot 100</option><option>100 tot 250</option><option>Meer dan 250</option><option>Weet ik niet</option>
+          </select></div>
+        <fieldset>
+          <span class="legend">Waar kunnen wij u mee helpen?</span>
+          <div class="checks">
+            <label><input type="checkbox" id="c-1" name="dienst" value="Boekhouding &amp; administratie"> Boekhouding &amp; administratie</label>
+            <label><input type="checkbox" id="c-2" name="dienst" value="Btw-aangifte"> Btw-aangifte</label>
+            <label><input type="checkbox" id="c-9" name="dienst" value="Btw-fix (webshop / dropshipping)"> Btw-fix (webshop / dropshipping)</label>
+            <label><input type="checkbox" id="c-3" name="dienst" value="Jaarrekening"> Jaarrekening</label>
+            <label><input type="checkbox" id="c-4" name="dienst" value="IB / Vpb-aangifte"> IB / Vpb-aangifte</label>
+            <label><input type="checkbox" id="c-5" name="dienst" value="Salarisadministratie"> Salarisadministratie</label>
+            <label><input type="checkbox" id="c-6" name="dienst" value="Fiscaal advies"> Fiscaal advies</label>
+            <label><input type="checkbox" id="c-7" name="dienst" value="Herstructurering"> Herstructurering</label>
+            <label><input type="checkbox" id="c-8" name="dienst" value="Estate planning"> Estate planning</label>
+          </div>
+        </fieldset>
+        <div class="field wide"><label for="f-bericht">Toelichting</label><textarea id="f-bericht" name="bericht" placeholder="Bijvoorbeeld: ik start per januari een bv en zoek iemand voor de boekhouding en de aangiftes."></textarea></div>
+        <div class="form-foot">
+          <small>Uw gegevens gebruiken wij alleen om op uw aanvraag te reageren.</small>
+          <button class="btn" type="submit">Offerte aanvragen</button>
+        </div>
+        <p class="error" id="form-error" hidden></p>
+        <div class="sent" id="form-sent" hidden>
+          <strong style="color:var(--bordeaux)">Uw aanvraag staat klaar</strong>
+          <p style="font-size:.9rem">Uw e-mailprogramma opent met het bericht aan info@frontboekhouders.com. Opent er niets? Kopieer dan de tekst hieronder en mail deze naar ons.</p>
+          <pre id="sent-text"></pre>
+          <button class="copy" type="button" id="copy-msg">Tekst kopi&euml;ren</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="monogram-light.png" alt="">
+        <div><b>FRONT</b><small>Boekhouders &amp; Adviseurs</small></div>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#diensten">Diensten</a><a href="#over-ons">Over ons</a><a href="#reviews">Reviews</a><a href="#kennisbank">Kennisbank</a><a href="#offerte">Offerte</a>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <span>info@frontboekhouders.com</span>
+      <span>&copy; <span id="year">2026</span> FRONT Boekhouders &amp; Adviseurs</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Kennisbank-artikelen. Nieuw artikel toevoegen: kopieer een blok en pas de tekst aan. */
+const POSTS = [
+  {
+    cat: "Ondernemen", date: "September 2026",
+    title: "Wet DBA: werkt u als zzp'er zonder risico?",
+    intro: "Sinds 1 januari 2025 handhaaft de Belastingdienst weer volledig op schijnzelfstandigheid. Wat betekent dat voor opdrachtgevers en zelfstandigen?",
+    body: [
+      ["p","Het handhavingsmoratorium op de Wet DBA is per 1 januari 2025 beëindigd. De Belastingdienst kan sindsdien weer naheffingen en boetes opleggen als een opdrachtrelatie in de praktijk een dienstbetrekking blijkt te zijn."],
+      ["h","Waar kijkt de Belastingdienst naar?"],
+      ["ul",["Werkt u onder gezag van de opdrachtgever, of bepaalt u zelf hoe u het werk uitvoert?","Bent u ingebed in de organisatie, bijvoorbeeld met een vaste werkplek en een eigen e-mailadres?","Loopt u ondernemersrisico en heeft u meerdere opdrachtgevers?"]],
+      ["h","Wat kunt u doen?"],
+      ["p","Leg de afspraken schriftelijk vast en zorg dat de praktijk overeenkomt met wat er op papier staat. Twijfelt u over een opdracht? Laat de relatie vooraf beoordelen, dat voorkomt verrassingen achteraf."]
+    ]
+  },
+  {
+    cat: "Box 3", date: "Augustus 2026",
+    title: "Box 3 op weg naar het werkelijk rendement",
+    intro: "Het kabinet werkt aan een nieuw box 3-stelsel waarin u belasting betaalt over het rendement dat u werkelijk behaalt. Tot die tijd geldt een overbruggingsregeling.",
+    body: [
+      ["p","Na het Kerstarrest van de Hoge Raad mag de Belastingdienst niet langer uitgaan van een fictief rendement als uw werkelijke rendement lager is. Daarom is er een overbruggingsstelsel en wordt gewerkt aan een definitief stelsel op basis van werkelijk rendement."],
+      ["h","Wat betekent dit nu voor u?"],
+      ["ul",["Bewaar jaaroverzichten van banken, beleggingen en vastgoed zorgvuldig.","Is uw werkelijke rendement lager dan het forfaitaire rendement? Dan kunt u dat aantonen en mogelijk minder belasting betalen.","Heeft u vermogen in box 3 en een bv? Bekijk dan samen met ons of een andere verdeling gunstiger is."]]
+    ]
+  },
+  {
+    cat: "Btw", date: "Juli 2026",
+    title: "De kleineondernemersregeling: vrijstelling van btw",
+    intro: "Met een lage omzet kunt u gebruikmaken van de KOR en hoeft u geen btw te rekenen en geen btw-aangifte te doen. Maar is dat altijd verstandig?",
+    body: [
+      ["p","De kleineondernemersregeling (KOR) is bedoeld voor ondernemers met een beperkte jaaromzet. U rekent dan geen btw aan uw klanten en doet geen btw-aangifte. Sinds 2025 kunnen ondernemers onder voorwaarden ook in andere EU-landen gebruikmaken van een vrijstelling."],
+      ["h","Let op"],
+      ["ul",["U kunt de btw op uw eigen inkopen en investeringen niet meer terugvragen.","Levert u vooral aan bedrijven? Dan is de KOR vaak minder voordelig.","Gaat u een grote investering doen? Reken dan eerst door of de KOR voor u uitkomt."]]
+    ]
+  }
+];
+
+const postsEl = document.getElementById("posts");
+POSTS.forEach((p, i) => {
+  const a = document.createElement("article");
+  a.className = "post";
+  const body = p.body.map(([t, v]) =>
+    t === "h" ? `<h4>${v}</h4>` :
+    t === "ul" ? `<ul>${v.map(x => `<li>${x}</li>`).join("")}</ul>` : `<p>${v}</p>`
+  ).join("");
+  a.innerHTML = `
+    <div class="meta"><span>${p.cat}</span><span>${p.date}</span></div>
+    <div style="min-width:0"><h3>${p.title}</h3><p>${p.intro}</p></div>
+    <button type="button" aria-expanded="false" aria-controls="post-${i}">Lees verder</button>
+    <div class="full" id="post-${i}" hidden>${body}
+      <p class="disclaimer">Dit artikel is algemene informatie en geen persoonlijk advies. Wet- en regelgeving kan wijzigen. Neem contact met ons op voor advies over uw situatie.</p>
+    </div>`;
+  const btn = a.querySelector("button"), full = a.querySelector(".full");
+  btn.addEventListener("click", () => {
+    full.hidden = !full.hidden;
+    btn.setAttribute("aria-expanded", String(!full.hidden));
+    btn.textContent = full.hidden ? "Lees verder" : "Inklappen";
+  });
+  postsEl.appendChild(a);
+});
+
+/* Mobiel menu */
+const toggle = document.getElementById("menu-toggle"), nav = document.getElementById("nav");
+toggle.addEventListener("click", () => {
+  const open = nav.classList.toggle("open");
+  toggle.setAttribute("aria-expanded", String(open));
+});
+nav.querySelectorAll("a").forEach(l => l.addEventListener("click", () => { nav.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); }));
+
+/* Kopiëren */
+function copyText(text, btn, label){
+  const done = () => { btn.textContent = "Gekopieerd"; setTimeout(() => btn.textContent = label, 1800); };
+  try {
+    navigator.clipboard.writeText(text).then(done).catch(() => selectFallback(text, btn, label));
+  } catch(e){ selectFallback(text, btn, label); }
+}
+function selectFallback(text, btn){
+  const el = btn.previousElementSibling;
+  const r = document.createRange(); r.selectNodeContents(el);
+  const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  btn.textContent = "Geselecteerd, druk Ctrl/Cmd+C";
+}
+document.getElementById("copy-email").addEventListener("click", e => copyText("info@frontboekhouders.com", e.currentTarget, "Adres kopiëren"));
+
+/* Offerteformulier */
+const form = document.getElementById("offerte"), err = document.getElementById("form-error"), sent = document.getElementById("form-sent");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const d = new FormData(form);
+  const naam = (d.get("naam")||"").trim(), email = (d.get("email")||"").trim();
+  if(!naam || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent = !naam ? "Vul uw naam in, zodat wij weten wie de aanvraag doet." : "Vul een geldig e-mailadres in, zodat wij u kunnen antwoorden.";
+    err.hidden = false; sent.hidden = true; return;
+  }
+  err.hidden = true;
+  const diensten = d.getAll("dienst");
+  const text =
+`Offerteaanvraag via de website
+
+Naam: ${naam}
+Bedrijf: ${d.get("bedrijf")||"-"}
+E-mail: ${email}
+Telefoon: ${d.get("telefoon")||"-"}
+Rechtsvorm: ${d.get("rechtsvorm")}
+Facturen per maand: ${d.get("omvang")}
+Diensten: ${diensten.length ? diensten.join(", ") : "-"}
+
+Toelichting:
+${d.get("bericht")||"-"}`;
+  document.getElementById("sent-text").textContent = text;
+  sent.hidden = false;
+  const link = document.createElement("a");
+  link.href = "mailto:info@frontboekhouders.com?subject=" + encodeURIComponent("Offerteaanvraag " + (d.get("bedrijf")||naam)) + "&body=" + encodeURIComponent(text);
+  link.click();
+});
+document.getElementById("copy-msg").addEventListener("click", e => copyText(document.getElementById("sent-text").textContent, e.currentTarget, "Tekst kopiëren"));
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
